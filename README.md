@@ -15,7 +15,7 @@ This returns an object with the following properties:
 
 $paths->dir        # dir path for the directory that myplugin.php is in
 $paths->uri        # URI path for the directory that myplugin.php is in
-$paths->texdomain  # defaults to the string 'myplugin'
+$paths->textdomain  # defaults to the string 'myplugin'
 ```
 
 You can use the properties to define constants or static vars for your paths:
