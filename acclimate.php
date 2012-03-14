@@ -11,7 +11,7 @@
  * @example     $paths = new Acclimate(__FILE__);  # called from myplugin.php
  *              $myplugin_dir = $paths->dir;  # dir path for the directory that myplugin.php is in
  *              $myplugin_uri = $paths->uri;  # URI path for the directory that myplugin.php is in
- *              $myplugin_domain = $paths->load_relative_textdomain('lang');
+ *              $paths->load_relative_textdomain('lang');  # normalized textdomain loader
  */
 
 if ( !class_exists('Acclimate')) {
