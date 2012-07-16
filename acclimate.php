@@ -6,20 +6,41 @@
  * @author      Ryan Van Etten (c) 2012
  * @link        github.com/ryanve/acclimate
  * @license     MIT
- * @version     1.0.0
+ * @version     1.1.0
  *
- * @example     $paths = new Acclimate(__FILE__);  # called from myplugin.php
+ * @example     $paths = acclimate(__FILE__); # called from myplugin.php
  *              $myplugin_dir = $paths->dir;  # dir path for the directory that myplugin.php is in
  *              $myplugin_uri = $paths->uri;  # URI path for the directory that myplugin.php is in
  *              $paths->load_relative_textdomain('lang');  # normalized textdomain loader
  */
 
-if ( !class_exists('Acclimate')) {
-class Acclimate
+# prevent errors if acclimate.php is loaded multiple times, but let
+# "cannot redeclare" errors happen if it looks like a name conflict:
+if ( !function_exists('acclimate') || !class_exists('Acclimate')){#wrap
+
+/**
+ * Global function for instantiating the Acclimate class.
+ * @param     string      $file    is the file location to base acclimation on.
+ * @return    object               is an Acclimate instance.
+ */
+function acclimate( $file = null )
 {
-  
-	function __construct( $file )
+	if ( is_string($file) || !func_num_args() )
+		return new Acclimate( $file );
+	
+	if ( $file instanceof Acclimate )
+		return $file;
+
+	trigger_error(__FUNCTION__ . ' parameter 1 expects string.', E_USER_ERROR);
+}
+
+class Acclimate 
+{
+	function __construct( $file = null )
 	{
+		if ( !is_string($file) )
+			return $this;
+
 		// Determine the location that $file has been loaded from:
 		
 		$location = dirname($file) . '/';           // full path for directory that $file is in
@@ -98,8 +119,8 @@ class Acclimate
 		
 		return load_muplugin_textdomain($this->textdomain, dirname($this->dir) . $rel_path);  #wp
 	}
-	
-}//class
-}//if
+
+}#class
+}#wrap
 
 // End of file.
