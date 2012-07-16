@@ -49,14 +49,14 @@ class Acclimate
 		// It should match one of these:
 		
 		$case_parent_theme = path_join(get_template_directory(), $basename); #wp
-		$case_plugins      = path_join(WP_PLUGIN_DIR, $basename);                    #wp
+		$case_plugins      = path_join(WP_PLUGIN_DIR, $basename);            #wp
 		$case_mu_plugins   = is_dir(WPMU_PLUGIN_DIR) ? path_join(WPMU_PLUGIN_DIR, $basename) : 0;
 		
-		// Run check to determine which one:
-		
-		$this->in_parent_theme = (bool) ($case_parent_theme === $location);
-		$this->in_plugins = (bool) ($case_plugins === $location);
-		$this->in_mu_plugins = (bool) ($case_mu_plugins === $location);
+		// Determine location and add boolean props:
+
+		$this->in_parent_theme = $location === $case_parent_theme;
+		$this->in_plugins = $location === $case_plugins;
+		$this->in_mu_plugins = $location === $case_mu_plugins;
 		
 		// Then define uri/dir props accordingly:
 		
