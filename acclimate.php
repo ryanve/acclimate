@@ -16,7 +16,7 @@
 
 # prevent errors if acclimate.php is loaded multiple times, but let
 # "cannot redeclare" errors happen if it looks like a name conflict:
-if ( !function_exists('acclimate') || !class_exists('Acclimate')){#wrap
+if ( !function_exists('acclimate') || !class_exists('Acclimate')) { #wrap
 
 /**
  * Global function for instantiating the Acclimate class.
@@ -42,7 +42,7 @@ class Acclimate
 			return $this;
 
 		// Determine the location that $file has been loaded from:
-		
+
 		$location = dirname($file) . '/';           // full path for directory that $file is in
 		$basename = basename(dirname($file)) . '/'; // name of directory that $file is in
 		
@@ -83,18 +83,17 @@ class Acclimate
 			trigger_error('class ' . get_class($this) . ' instantiated from invalid location.', E_USER_ERROR);
 		}
 
-		// Complete the URI (using the same technique as R5::uri_join, but it didn't seem worth inheriting R5
-		// for 1 use of 1 method, and this way this class can easily be dropped into another project:
+		// Join the URI parts:
 		
 		$uri = rtrim($uri, '/') . '/' . ltrim($basename, '/');
 		
-		// Define props
-		
+		// Set object props:
+
 		$this->dir = $dir;             // includes trailing slash
 		$this->uri = $uri;             // includes trailing slash
 		$this->textdomain = $basename; // default (reset if needed)
-		
-		return $this; // object instance
+
+		return $this; // instance
 	}
 
 	/**
