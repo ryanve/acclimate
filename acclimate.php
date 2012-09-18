@@ -85,7 +85,7 @@ class Acclimate
 
 		// Join the URI parts:
 		
-		$uri = rtrim($uri, '/') . '/' . ltrim($basename, '/');
+		$uri = trailingslashit($uri) . ltrim($basename, '/'); #wp
 		
 		// Set object props:
 
@@ -113,7 +113,8 @@ class Acclimate
 		
 		if ( $this->in_parent_theme )
 		{
-			return load_theme_textdomain($this->textdomain, trailingslashit(get_template_directory()) . $rel_path); #wp
+			$path = trailingslashit(get_template_directory()) . $rel_path; #wp
+			return load_theme_textdomain( $this->textdomain, $path );      #wp
 		}
 		
 		return load_muplugin_textdomain($this->textdomain, dirname($this->dir) . $rel_path);  #wp
