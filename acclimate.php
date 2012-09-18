@@ -6,7 +6,7 @@
  * @author      Ryan Van Etten (c) 2012
  * @link        github.com/ryanve/acclimate
  * @license     MIT
- * @version     1.1.0
+ * @version     1.1.1
  *
  * @example     $paths = acclimate(__FILE__); # called from myplugin.php
  *              $myplugin_dir = $paths->dir;  # dir path for the directory that myplugin.php is in
@@ -98,26 +98,28 @@ class Acclimate
 
 	/**
 	 * load_relative_textdomain()      Normalized textdomain loading based on $file location.
-	 * 
-	 * 
+	 *
+	 * @param   string    $path        is the **relative** path
 	 */
-	 
-	function load_relative_textdomain( $rel_path = '' )
+
+	function load_relative_textdomain( $path = '' )
 	{
-		empty($rel_path) or $rel_path = trim($rel_path, '/') . '/';
-		
+		empty($path) or $path = trim($path, '/') . '/';
+
 		if ( $this->in_plugins )
 		{
-			return load_plugin_textdomain($this->textdomain, false, dirname($this->dir) . $rel_path); #wp
+			$path = dirname($this->dir) . $path; // build full path
+			return load_plugin_textdomain($this->textdomain, false, $path); #wp
 		}
-		
+
 		if ( $this->in_parent_theme )
 		{
-			$path = trailingslashit(get_template_directory()) . $rel_path; #wp
+			$path = trailingslashit(get_template_directory()) . $path; #wp
 			return load_theme_textdomain( $this->textdomain, $path );      #wp
 		}
-		
-		return load_muplugin_textdomain($this->textdomain, dirname($this->dir) . $rel_path);  #wp
+
+		$path = dirname($this->dir) . $path; // build full path
+		return load_muplugin_textdomain($this->textdomain, $path);  #wp
 	}
 
 }#class
