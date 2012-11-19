@@ -6,7 +6,7 @@
  * @author      Ryan Van Etten (c) 2012
  * @link        github.com/ryanve/acclimate
  * @license     MIT
- * @version     1.1.1
+ * @version     1.1.2
  *
  * @example     $paths = acclimate(__FILE__); # called from myplugin.php
  *              $myplugin_dir = $paths->dir;  # dir path for the directory that myplugin.php is in
@@ -25,7 +25,7 @@ if ( !function_exists('acclimate') || !class_exists('Acclimate')) { #wrap
      */
     function acclimate( $file = null )
     {
-        if ( is_string($file) || !func_num_args() )
+        if ( is_string($file) || null === $file )
             return new Acclimate( $file );
         
         if ( $file instanceof Acclimate )
@@ -38,7 +38,7 @@ if ( !function_exists('acclimate') || !class_exists('Acclimate')) { #wrap
     {
         function __construct( $file = null )
         {
-            if ( !is_string($file) )
+            if ( null === $file )
                 return $this;
 
             // Determine the location that $file has been loaded from:
