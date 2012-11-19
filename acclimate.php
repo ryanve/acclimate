@@ -36,8 +36,8 @@ if ( !function_exists('acclimate') || !class_exists('Acclimate')) { #wrap
 
     class Acclimate {
 
-        function __construct( $file = null )
-        {
+        function __construct( $file = null ) {
+
             if ( null === $file )
                 return $this;
 
