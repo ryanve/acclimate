@@ -80,7 +80,7 @@ if ( !function_exists('acclimate') || !class_exists('Acclimate')) { #wrap
             
             else 
             {
-                trigger_error('class ' . get_class($this) . ' instantiated from invalid location.', E_USER_ERROR);
+                trigger_error( 'Invalid ' . get_class($this) . ' file location.', E_USER_ERROR );
             }
 
             // Join the URI parts:
