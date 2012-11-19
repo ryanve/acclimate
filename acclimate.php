@@ -23,8 +23,8 @@ if ( !function_exists('acclimate') || !class_exists('Acclimate')) { #wrap
      * @param     string      $file    is the file location to base acclimation on.
      * @return    object               is an Acclimate instance.
      */
-    function acclimate( $file = null )
-    {
+    function acclimate( $file = null ) {
+
         if ( is_string($file) || null === $file )
             return new Acclimate( $file );
         
@@ -34,8 +34,8 @@ if ( !function_exists('acclimate') || !class_exists('Acclimate')) { #wrap
         trigger_error(__FUNCTION__ . ' parameter 1 expects string.', E_USER_ERROR);
     }
 
-    class Acclimate 
-    {
+    class Acclimate {
+
         function __construct( $file = null )
         {
             if ( null === $file )
@@ -43,49 +43,45 @@ if ( !function_exists('acclimate') || !class_exists('Acclimate')) { #wrap
 
             // Determine the location that $file has been loaded from:
 
-            $location = dirname($file) . '/';           // full path for directory that $file is in
-            $basename = basename(dirname($file)) . '/'; // name of directory that $file is in
+            $location = dirname( $file ) . '/';           // full path for directory that $file is in
+            $basename = basename( dirname($file) ) . '/'; // name of directory that $file is in
             
             // It should match one of these:
             
-            $case_parent_theme = path_join(get_template_directory(), $basename); #wp
-            $case_plugins      = path_join(WP_PLUGIN_DIR, $basename);            #wp
-            $case_mu_plugins   = is_dir(WPMU_PLUGIN_DIR) ? path_join(WPMU_PLUGIN_DIR, $basename) : 0;
+            $case_parent_theme = path_join( get_template_directory(), $basename ); #wp
+            $case_plugins      = path_join( WP_PLUGIN_DIR, $basename );            #wp
+            $case_mu_plugins   = is_dir( WPMU_PLUGIN_DIR ) ? path_join( WPMU_PLUGIN_DIR, $basename ) : 0;
             
             // Determine location and add boolean props:
 
             $this->in_parent_theme = $location === $case_parent_theme;
-            $this->in_plugins = $location === $case_plugins;
-            $this->in_mu_plugins = $location === $case_mu_plugins;
+            $this->in_plugins      = $location === $case_plugins;
+            $this->in_mu_plugins   = $location === $case_mu_plugins;
             
             // Then define uri/dir props accordingly:
             
-            if ( $this->in_parent_theme )
-            {
+            if ( $this->in_parent_theme ) {
+            
                 $dir = $case_parent_theme;
                 $uri = get_template_directory_uri(); #wp // base only at this step
-            }
+                
+            } elseif ( $this->in_plugins ) {
             
-            elseif ( $this->in_plugins )
-            {
                 $dir = $case_plugins;                    // plugin_dir_path(__FILE__)
                 $uri = plugins_url();                #wp // base only at this step
-            }
+                
+            } elseif ( $this->in_mu_plugins ) {
             
-            elseif ( $this->in_mu_plugins )
-            {
                 $dir = $case_mu_plugins;
                 $uri = WPMU_PLUGIN_URL;              #wp // base only at this step
-            }
-            
-            else 
-            {
+                
+            } else {
                 trigger_error( 'Invalid ' . get_class($this) . ' file location.', E_USER_ERROR );
             }
 
             // Join the URI parts:
-            
-            $uri = trailingslashit($uri) . ltrim($basename, '/'); #wp
+
+            $uri = trailingslashit($uri) . ltrim( $basename, '/' ); #wp
             
             // Set object props:
 
@@ -101,25 +97,22 @@ if ( !function_exists('acclimate') || !class_exists('Acclimate')) { #wrap
          *
          * @param   string    $path        is the **relative** path
          */
+        function load_relative_textdomain( $path = '' ) {
 
-        function load_relative_textdomain( $path = '' )
-        {
             empty($path) or $path = trim($path, '/') . '/';
 
-            if ( $this->in_plugins )
-            {
-                $path = dirname($this->dir) . $path; // build full path
-                return load_plugin_textdomain($this->textdomain, false, $path); #wp
+            if ( $this->in_plugins ) {
+                $path = dirname( $this->dir ) . $path; // build full path
+                return load_plugin_textdomain( $this->textdomain, false, $path ); #wp
             }
 
-            if ( $this->in_parent_theme )
-            {
-                $path = trailingslashit(get_template_directory()) . $path; #wp
+            if ( $this->in_parent_theme ) {
+                $path = trailingslashit( get_template_directory() ) . $path; #wp
                 return load_theme_textdomain( $this->textdomain, $path );      #wp
             }
 
             $path = dirname($this->dir) . $path; // build full path
-            return load_muplugin_textdomain($this->textdomain, $path);  #wp
+            return load_muplugin_textdomain( $this->textdomain, $path );  #wp
         }
 
     }#class
